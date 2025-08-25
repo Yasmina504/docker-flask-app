@@ -1,0 +1,33 @@
+services:
+  web:
+    build: .
+    container_name: flask_app
+    ports:
+      - "6000:6000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=mydb
+    depends_on:
+      - redis
+      - mysql
+
+  redis:
+    image: redis:6.2
+    container_name: redis_server
+    ports:
+      - "6379:6379"
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_server
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydb
+    ports:
+      - "3307:3306"
+
